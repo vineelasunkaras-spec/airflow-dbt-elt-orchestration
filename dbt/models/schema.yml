@@ -1,0 +1,23 @@
+version: 2
+models:
+  - name: fct_sales
+    columns:
+      - name: order_line_id
+        tests: [unique, not_null]
+      - name: customer_key
+        tests:
+          - relationships: {to: ref('dim_customer'), field: customer_key}
+      - name: quantity
+        tests:
+          - dbt_utils.accepted_range: {min_value: 1}
+      - name: status
+        tests:
+          - accepted_values: {values: ['placed', 'shipped', 'delivered', 'returned', 'cancelled']}
+  - name: dim_customer
+    columns:
+      - name: customer_key
+        tests: [unique, not_null]
+  - name: dim_product
+    columns:
+      - name: product_key
+        tests: [unique, not_null]
