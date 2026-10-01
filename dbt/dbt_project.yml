@@ -1,0 +1,15 @@
+name: retail_analytics
+version: "1.0.0"
+config-version: 2
+profile: retail_analytics
+model-paths: ["models"]
+
+models:
+  retail_analytics:
+    +materialized: view
+    stg_orders:   {+tags: ["staging"]}
+    stg_customers: {+tags: ["staging"]}
+    stg_products: {+tags: ["staging"]}
+    dim_customer: {+materialized: table, +tags: ["marts"]}
+    dim_product:  {+materialized: table, +tags: ["marts"]}
+    fct_sales:    {+materialized: incremental, +unique_key: order_line_id, +tags: ["marts"]}
